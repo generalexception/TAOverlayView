@@ -51,6 +51,30 @@ open class TAOverlayView: UIView {
             self.subtractFromView(paths: paths)
         }
     }
+    
+    public init(frame: CGRect, bgColor:UIColor, subtractedPaths: [TABaseSubtractionPath]? = nil) {
+        super.init(frame: frame)
+        
+        // Set a semi-transparent, black background.
+        self.backgroundColor = bgColor
+        
+        // Create the initial layer from the view bounds.
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = self.bounds
+        maskLayer.fillColor = UIColor.black.cgColor
+        
+        let path = UIBezierPath(rect: self.bounds)
+        maskLayer.path = path.cgPath
+        maskLayer.fillRule = kCAFillRuleEvenOdd
+        
+        // Set the mask of the view.
+        self.layer.mask = maskLayer
+        
+        if let paths = subtractedPaths {
+            // Subtract any given paths.
+            self.subtractFromView(paths: paths)
+        }
+    }
 
 
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
